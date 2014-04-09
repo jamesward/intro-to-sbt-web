@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Intro to sbt-web</title>
+
+		<meta name="description" content="sbt-web is a new web asset pipeline for Play Framework and other sbt-based frameworks. It can pull dependencies from both Node and WebJars. The pipeline covers all of the phases of client-side development, including: linting, compiling (CoffeeScript, LESS, etc), minification, concatenation, fingerprinting, and gzipping. This session will give you an introduction to sbt-web and show you how to get started using it.">
+		<meta name="author" content="James Ward">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+        
+        <style type="text/css">
+            .reveal .controls {
+                bottom: auto;
+                top: 0px;
+            }
+        </style>
+
+	</head>
+
+	<body>
+    
+        <aside style="display: block; position: fixed; bottom: 5px; left: 10px; z-index: 30;">
+            <a href="http://typesafe.com"><img src="assets/logo.png"></a>
+        </aside>
+
+        <aside style="display: block; position: fixed; bottom: 10px; right: 10px; z-index: 30;">
+            <a href="https://twitter.com/_JamesWard" class="twitter-follow-button" data-show-count="false" data-lang="en" data-size="large">Follow @_JamesWard</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        </aside>
+
+		<div class="reveal">
+
+			<div class="slides">
+            
+                <section>
+                    <h2>Introducing sbt-web</h2>
+                    <h3>A Node & WebJar Compatible Asset Pipeline for the Typesafe Platform</h3>
+                    <p>
+                        <small><a href="http://www.jamesward.com">James Ward</a> ~ <a href="http://twitter.com/_jamesward">@_JamesWard</a></small>
+                    </p>
+                </section>
+                
+                <section>
+                    <h3>Asset Pipelines</h3>
+                    
+                    <ul>
+                        <li>Source linting</li>
+                        <li>Source files =&gt; "executable"</li>
+                        <li>Executable =&gt; Optimized / Minified</li>
+                        <li>Executable =&gt; Fingerprinted</li>
+                        <li>Executables =&gt; Concatenated</li>
+                        <li>Testing</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>sbt-web</h3>
+                    
+                    <blockquote>An asset Pipeline on top of sbt</blockquote>
+                    
+                    <ul>
+                        <li>Incremental</li>
+                        <li>Parallel</li>
+                        <li>Node native or Node emulated (Trireme)</li>
+                        <li>Dependency management with WebJars and/or NPM</li>
+                        <li>Any sbt project</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>Current Asset Compilers</h3>
+                    
+                    <ul>
+                        <li><a href="http://github.com/sbt/sbt-jshint">sbt-jshint</a></li>
+                        <li><a href="http://github.com/sbt/sbt-coffeescript">sbt-coffeescript</a></li>
+                        <li><a href="http://github.com/sbt/sbt-less">sbt-less</a></li>
+                        <li><a href="http://github.com/sbt/sbt-digest">sbt-digest</a></li>
+                        <li><a href="http://github.com/sbt/sbt-mocha">sbt-mocha</a></li>
+                        <li><a href="http://github.com/sbt/sbt-rjs">sbt-rjs</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Future Asset Compilers</h3>
+
+                    <ul>
+                        <li>Uglify</li>
+                        <li>ScalaJS</li>
+                        <li>Sass</li>
+                        <li>Stylus</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>Current Status</h3>
+                    
+                    <ul>
+                        <li>sbt-* 1.0.0-M2a</li>
+                        <li>Super easy API</li>
+                        <li>Play 2.3 M1</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>Setup for Play 2.3 M1</h3>
+                    
+                    <small>project/plugins.sbt</small>
+                    <pre><code>addSbtPlugin("com.typesafe.sbt" % "sbt-blah" % "1.0.0-M2a")</code></pre>
+                </section>
+                
+                <section>
+                    <h3>sbt-jshint</h3>
+                    
+                    <small style="display: block;">app/assets/foo.js</small>
+                    <img src="assets/jslint.png">
+                </section>
+
+                <section>
+                    <h3>sbt-coffeescript</h3>
+
+                    <small style="display: block;">app/assets/foo.coffee</small>
+                    <pre><code>$ ->
+  console.log("hello, world from coffeescript")</code></pre>
+                    <small style="display: block;">app/views/foo.scala.html</small>
+                    <pre><code>&lt;script src='@routes.Assets.at("index.js")'&gt;&lt;/script&gt;</code></pre>
+                </section>
+                
+                <section>
+                    <h3>sbt-less</h3>
+
+                    <small style="display: block;">app/assets/foo.less</small>
+                    <pre><code>body {
+    background-color: #000066;
+}</code></pre>
+                    <small style="display: block;">app/views/foo.scala.html</small>
+                    <pre><code>&lt;link rel='stylesheet' href='@routes.Assets.at("index.css")'&gt;</code></pre>
+                </section>
+
+                <section>
+                    <h3>sbt-digest</h3>
+
+                    <pre><code>activator start || activator stage || activator dist</code></pre>
+                    
+                    <pre><code>find target/web -name "*.md5"</code></pre>
+                </section>
+
+                <section>
+                    <h3>sbt-mocha</h3>
+
+                    <small style="display: block;">test/assets/FooSpec.js</small>
+                    <pre><code>var assert = require("assert");
+
+describe("Foo", function() {
+    it("should correctly add numbers", function() {
+        assert.equal(2, 1+1);
+    });
+});</code></pre>
+                </section>
+                
+                <section>
+                    <h3>sbt-rjs</h3>
+
+                    <small style="display: block;">app/assets/main.js</small>
+                    
+                    <pre><code>requirejs.config({
+    paths: {
+        'jquery': ['./lib/jquery/jquery'],
+        'bootstrap': ['./lib/bootstrap/js/bootstrap']
+    },
+    shim: {
+        'jquery': { exports : '$' },
+        'bootstrap': { deps: ['jquery'] }
+    }
+});
+
+require(['bootstrap'], function(bootstrap) {
+    $('#myModal').modal();
+});</code></pre>
+
+                    <pre><code>&lt;script data-main="@routes.Assets.at("main")" src="@routes.WebJarAssets.at(WebJarAssets.locate("require.js"))"&gt;&lt;/script&gt;</code></pre>
+                    
+                </section>
+                
+                <section>
+                    <h3>Learn more</h3>
+                    <ul>
+                        <li><a href="http://www.playframework.com/documentation/2.3.x/Migration23">Play 2.3 Migration Guide</a></li>
+                        <li><a href="https://github.com/sbt/sbt-web">sbt-web</a></li>
+                    </ul>
+                </section>
+                
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
